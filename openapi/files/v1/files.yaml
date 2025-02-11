@@ -1,0 +1,159 @@
+components:
+  schemas:
+    files.File:
+      description: ""
+      properties:
+        dateAdded:
+          $ref: '#/components/schemas/mojo.core.Timestamp'
+        id:
+          title: mojo.core.String
+          type: string
+        isDeleted:
+          title: mojo.core.Bool
+          type: boolean
+        lastUpdated:
+          $ref: '#/components/schemas/mojo.core.Timestamp'
+        name:
+          title: mojo.core.String
+          type: string
+        permalink:
+          title: mojo.core.String
+          type: string
+        size:
+          format: Int64
+          title: mojo.core.Int64
+          type: integer
+      title: files.File
+      type: object
+    mojo.core.Timestamp:
+      description: ""
+      format: Timestamp
+      title: mojo.core.Timestamp
+      type: string
+info:
+  description: 文件相关的接口
+  title: 文件服务
+  version: "1.0"
+openapi: 3.0.3
+paths:
+  v1/files:
+    get:
+      description: ""
+      operationId: get_files
+      parameters:
+      - description: 默认值为false
+        in: query
+        name: include_deleted
+        schema:
+          title: mojo.core.Bool
+          type: boolean
+      - description: 默认值为null
+        in: query
+        name: limit
+        schema:
+          title: mojo.core.String
+          type: string
+      - description: 默认值为null
+        in: query
+        name: cursor
+        schema:
+          title: mojo.core.String
+          type: string
+      - description: 默认值为null
+        in: query
+        name: last_updated_after
+        schema:
+          $ref: '#/components/schemas/mojo.core.Timestamp'
+      - in: query
+        name: page_size
+        schema:
+          format: Int32
+          title: mojo.core.Int32
+          type: integer
+      - in: query
+        name: page_token
+        schema:
+          title: mojo.core.String
+          type: string
+      - in: query
+        name: skip
+        schema:
+          format: Int32
+          title: mojo.core.Int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/files.File'
+                title: mojo.core.Array
+                type: array
+          description: OK
+      summary: 获取文件详情
+    post:
+      description: ""
+      operationId: create_file
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/files.File'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/files.File'
+          description: OK
+      summary: 新增文件
+    put:
+      description: ""
+      operationId: update_file
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/files.File'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/files.File'
+          description: OK
+      summary: 更新文件信息
+  v1/files/{id}:
+    delete:
+      description: ""
+      operationId: delete_file
+      parameters:
+      - in: path
+        name: id
+        schema:
+          title: mojo.core.String
+          type: string
+      responses:
+        "200":
+          description: OK
+      summary: 删除用户
+    get:
+      description: ""
+      operationId: get_file
+      parameters:
+      - in: path
+        name: id
+        schema:
+          title: mojo.core.String
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/files.File'
+          description: OK
+      summary: 获取指定的文件详情
