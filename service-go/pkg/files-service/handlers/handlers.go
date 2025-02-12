@@ -5,8 +5,9 @@ import (
 
 	"github.com/chaos-io/chaos/logs"
 
-	"github.com/fuzzstan/files/go/pkg/files"
 	"github.com/mojo-lang/core/go/pkg/mojo/core"
+
+	"github.com/fuzzstan/files/go/pkg/files"
 
 	// this service api
 	pb "github.com/fuzzstan/files/go/pkg/files/v1"
@@ -31,8 +32,18 @@ func NewService() pb.FilesServer {
 func (s filesServer) GetFiles(ctx context.Context, in *pb.GetFilesRequest) (*pb.GetFilesResponse, error) {
 	logs.Infow("GetFiles", "request", in)
 
+	f := &files.File{
+		Id:          "a1b2",
+		Name:        "name1",
+		Size:        100,
+		Permalink:   "https://g.cn",
+		DateAdded:   core.Now(),
+		LastUpdated: nil,
+		IsDeleted:   false,
+	}
+
 	resp := &pb.GetFilesResponse{
-		// Files:
+		Files: []*files.File{f},
 		// TotalCount:
 		// NextPageToken:
 	}
@@ -58,6 +69,10 @@ func (s filesServer) GetFile(ctx context.Context, in *pb.GetFileRequest) (*files
 // CreateFile implements Interface.
 func (s filesServer) CreateFile(ctx context.Context, in *pb.CreateFileRequest) (*files.File, error) {
 	logs.Infow("CreateFile", "request", in)
+
+	if in.File == nil {
+		return nil, core.NewErrorFrom(400, "missing_parameter")
+	}
 
 	resp := &files.File{
 		// Id:
